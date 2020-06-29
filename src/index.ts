@@ -1,81 +1,73 @@
-// type acc = {
+// type,  interface, function, classes
+
+// type Info = {
+//     salary: number
+// }
+
+// interface IAccount<UserInfo extends Info & {male: boolean}, UserId = string> {
+//     id: UserId;
 //     name: string;
-//     age: number
+//     info: UserInfo
 // }
 
-// let user: acc;
-
-// Object/function
-
-// interface Ipoint {
-//     x: number;
-//     y: number;
+// let user: IAccount<{male: boolean, salary: number}> = {
+//     id: 'adfadsf',
+//     name: 'Andrew',
+//     info: {
+//         male: true,
+//         salary: 3000
+//     }
+// }
+// let admin: IAccount<{salary: number, subjects: string[], male: boolean}, number> = {
+//     id: 2452435,
+//     name: 'sanyok',
+//     info: {
+//         salary: 3000,
+//         subjects: ['TS', 'JS'],
+//         male: true
+//     }
 // }
 
-// type TPoint = {
-//     x: number;
-//     y: number;
-// }
-// let point1: TPoint = {
-//     x: 1,
-//     y: 1
-// }
-
-// interface ISetPoint {
-//     (x: number, y: number): void;
-// }
-// type tSetPoint = (x: number, y: number) => void;
-
-
-// extend
-type PartialPoint = {
-    x: number;
-}
-
-
-interface IpartialPoint {
-    y: number;
-}
-
-//type Point = PartialPoint & IpartialPoint;
-
-interface Point extends PartialPoint, IpartialPoint {
-
-}
-
-let p1: Point = {
-    x: 1,
-    y: 1
-}
-
-// implements
-// type snd = string | number;
-
-class BasePoint implements PartialPoint, IpartialPoint {
-    public x: number = 10;
-    public y: number = 10;
-}
-
-// const user: TAccount = {
-//     name: 'Andre',
-//     age: 32
-// }
-
-
-interface TAccount {
+interface IUser {
     name: string;
-}
-interface TAccount {
     age: number;
 }
 
-class Acc implements TAccount {
-    public name: string = 'Sanyok';
-    public age: number = 22
+interface IProduct {
+    name: string;
+    price: number;
 }
 
+interface ICart extends IProduct {
+    count: number;
+}
+
+type TState = {
+    user: IUser;
+    products: IProduct[];
+    cart: ICart[];
+};
+
+const state: TState = {
+    user: { name: 'Sanyok', age: 26 },
+    products: [{ name: 'iphone 8', price: 200 }],
+    cart: [{ name: 'iphone 8', price: 200, count: 2 }],
+};
+
+type Select<State> = <Field extends keyof State>(
+    state: State,
+    field: Field
+) => State[Field];
+const select: Select<TState> = (storeState, field) => storeState[field];
+
+const user1: IUser = select(state, 'user');
+const products: IProduct[] = select(state, 'products');
+const cart: ICart[] = select(state, 'cart');
 
 
+function getProperty<Obj, Key extends keyof Obj>(obj: Obj, key: Key) {
+    return obj[key];
+}
 
-
-
+const key = 'key1';
+getProperty({a: 1}, 'a');
